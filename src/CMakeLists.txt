@@ -2,12 +2,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(src)
 
 #----------------------------------------------------------------                                          
-find_package( Qt4 COMPONENTS QtCore QtGui QtXml REQUIRED)
+find_package( Qt4 COMPONENTS QtCore QtGui QtXml QtDeclarative REQUIRED)
 
 INCLUDE_DIRECTORIES(
     ../inc
-    /usr/include/qt4
-    /usr/include/qt4/QtExtSerialPort
+	${QT_INCLUDES}
+	${QT_INCLUDE_DIR}/QtExtSerialPort
 )
 
 LINK_DIRECTORIES(
@@ -45,11 +45,10 @@ target_link_libraries(
 	qextserialport
 )
 
-#----------------------------------------------------------------                                          
+#----------------------------------------------------------------
 
-#----------------------------------------------------------------                                          
+#----------------------------------------------------------------
 INSTALL(
-
     FILES
         ${PROJECT_BINARY_DIR}/${OUTPUTNAME}
     DESTINATION
@@ -62,4 +61,3 @@ INSTALL(
         WORLD_READ
         WORLD_EXECUTE
         )
-
