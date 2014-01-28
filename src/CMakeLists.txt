@@ -1,63 +1,66 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
 PROJECT(src)
 
-#----------------------------------------------------------------                                          
-find_package( Qt4 COMPONENTS QtCore QtGui QtXml QtDeclarative REQUIRED)
+#----------------------------------------------------------------
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
 
-INCLUDE_DIRECTORIES(
-    ../inc
-	${QT_INCLUDES}
-	${QT_INCLUDE_DIR}/QtExtSerialPort
-)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
 
-LINK_DIRECTORIES(
-  /usr/local/lib
+#----------------------------------------------------------------
+include_directories(
+  ../inc
+  /usr/include/qt4/QtExtSerialPort
   )
 
-LINK_LIBRARIES(
+#----------------------------------------------------------------
+set(OUTPUTNAME "SerialPortApp")
+
+set(SRC_FILES
+  main.cpp
+  SerialPortClient.cpp
   )
 
-#----------------------------------------------------------------                                          
-SET(OUTPUTNAME "SerialPortApp")
+set(INC_FILES
+  ../inc/SerialPortClient.h
+  )
 
+qt5_wrap_cpp(MOC_FILES
+  ${INC_FILES}
+  )
 
-SET(SRC_FILES
-	main.cpp
-	SerialPortClient.cpp
-)
-
-SET(HDR_FILES
-	../inc/SerialPortClient.h
-)
-
-include(${QT_USE_FILE})
-QT4_WRAP_CPP( MOC_SRC_FILES ${HDR_FILES})
-
-ADD_EXECUTABLE(
-  ${OUTPUTNAME}
+#----------------------------------------------------------------
+add_executable(
+  ${OUTPUTNAME}.out
   ${SRC_FILES}
-  ${MOC_SRC_FILES}
+  ${MOC_FILES}
   )
 
 target_link_libraries(
-    ${OUTPUTNAME}
-    ${QT_LIBRARIES}
-	qextserialport
-)
+  ${OUTPUTNAME}.out
+  qextserialport
+  )
 
-#----------------------------------------------------------------
+qt5_use_modules(
+  ${OUTPUTNAME}.out
+  Widgets
+  Core
+  )
 
 #----------------------------------------------------------------
 INSTALL(
-    FILES
-        ${PROJECT_BINARY_DIR}/${OUTPUTNAME}
-    DESTINATION
-        ${CMAKE_SOURCE_DIR}/bin
-    PERMISSIONS
-        OWNER_READ
-        OWNER_EXECUTE
-        GROUP_READ
-        GROUP_EXECUTE
-        WORLD_READ
-        WORLD_EXECUTE
-        )
+  FILES
+  	${PROJECT_BINARY_DIR}/${OUTPUTNAME}.out
+  DESTINATION
+	${CMAKE_SOURCE_DIR}/bin
+  PERMISSIONS
+	OWNER_READ
+	OWNER_EXECUTE
+	GROUP_READ
+	GROUP_EXECUTE
+	WORLD_READ
+	WORLD_EXECUTE
+  )

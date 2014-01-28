@@ -1,3 +1,4 @@
+#include <QObject>
 #include <qextserialport.h>
 
 class SerialPortClient : public QObject
@@ -6,7 +7,7 @@ class SerialPortClient : public QObject
 
 public :
 	SerialPortClient();
-	~SerialPortClient();
+	virtual ~SerialPortClient();
 
 	int open(const QString &portpath, const PortSettings &settings);
 	int close();
